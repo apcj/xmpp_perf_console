@@ -50,7 +50,7 @@ function onMessage(msg) {
     
 		var bodyText = Strophe.getText(body);
 		if (!isNaN(bodyText)) {
-			latencies.append(new Date().getTime(), bodyText * 10000);
+			latencies.append(new Date().getTime(), parseFloat(bodyText));
 		}
 	}	
     
