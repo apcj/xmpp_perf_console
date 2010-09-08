@@ -1,28 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Strophe.js Echobot Example</title>
+  <title>XMPP Performanc Console</title>
   <script type='text/javascript'
 	  src='http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'></script>
   <script type='text/javascript'
 	  src='js/strophe.min.js'></script>
-  <script type='text/javascript'
-	  src='js/echobot.js'></script>
   <script type="text/javascript" src="js/smoothie.js"></script>
-  <script type="text/javascript">
-
-    // Randomly add a data point every 500ms
-    var random = new TimeSeries();
-    setInterval(function() {
-      random.append(new Date().getTime(), Math.random() * 10000);
-    }, 500);
-
-    function createTimeline() {
-      var chart = new SmoothieChart();
-      chart.addTimeSeries(random, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
-      chart.streamTo(document.getElementById("chart"), 500);
-    }
-  </script>
+  <script type='text/javascript'
+	  src='js/xmpp_perf_console.js'></script>
 </head>
 <body onload="createTimeline()">
   <div id='login' style='text-align: center'>
