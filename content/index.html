@@ -8,8 +8,23 @@
 	  src='js/strophe.min.js'></script>
   <script type='text/javascript'
 	  src='js/echobot.js'></script>
+  <script type="text/javascript" src="js/smoothie.js"></script>
+  <script type="text/javascript">
+
+    // Randomly add a data point every 500ms
+    var random = new TimeSeries();
+    setInterval(function() {
+      random.append(new Date().getTime(), Math.random() * 10000);
+    }, 500);
+
+    function createTimeline() {
+      var chart = new SmoothieChart();
+      chart.addTimeSeries(random, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+      chart.streamTo(document.getElementById("chart"), 500);
+    }
+  </script>
 </head>
-<body>
+<body onload="createTimeline()">
   <div id='login' style='text-align: center'>
     <form name='cred'>
       <label for='jid'>JID:</label>
@@ -19,6 +34,8 @@
       <input type='button' id='connect' value='connect' />
     </form>
   </div>
+  <hr />
+  <canvas id="chart" width="500" height="200"></canvas>
   <hr />
   <div id='log'></div>
 </body>
