@@ -122,9 +122,9 @@ function onMessage(msg) {
 // 		
 // 	}
 // }
-function updateChart(series, time, updateToMake, element, message) {
-	 series.append(time, updateToMake);			
-	 element.html(updateToMake + message);
+function updateChart(series, time, value, element, suffix) {
+	 series.append(time, value);			
+	 element.html(value.toFixed(0) + suffix);
 }
     
 function onDisconnect(msg) {
@@ -136,14 +136,6 @@ function onDisconnect(msg) {
 $(document).ready(function () {
     connection = new Strophe.Connection(BOSH_SERVICE);
 
-    // Uncomment the following lines to spy on the wire traffic.
-    //connection.rawInput = function (data) { log('RECV: ' + data); };
-    //connection.rawOutput = function (data) { log('SEND: ' + data); };
-
-    // Uncomment the following line to see all the debug output.
-    // Strophe.log = function (level, msg) { log('LOG: ' + msg); };
-
-
     $('#connect').bind('click', function () {
 	var button = $('#connect').get(0);
 	if (button.value == 'connect') {
@@ -152,6 +144,7 @@ $(document).ready(function () {
 	    connection.connect($('#jid').get(0).value,
 			       $('#pass').get(0).value,
 			       onConnect);
+		createTimeline();
 	} else {
 	    button.value = 'connect';  
 		connection.muc.leave("performance@chatrooms.jalewis.thoughtworks.com", "console", onDisconnect);

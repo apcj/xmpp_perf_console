@@ -1,0 +1,48 @@
+body {
+	font-family: Helvetica;
+}
+
+.mainDataDisplay {
+	overflow: hidden;
+	postion: absolute;
+	vertical-align: middle;
+	margin: 10px;
+	padding: 10px;
+	background-color: grey;
+	border-radius: 7px;
+}
+
+.mainDataDisplay div {
+	float: left;
+}
+
+.numberContainer {
+	padding: 10px;
+}
+.numberContainer div {
+	float: none;
+}
+
+.labelContainer {
+	position: relative;
+	width: 50px;
+	right: 0px;
+	top: 90px;
+	text-align: center;
+	-webkit-transform: rotate(-90deg); 
+	-moz-transform: rotate(-90deg);
+}
+
+.label, .unit {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.bigNumber {
+	font-size: 100px;
+	font-weight: bold;
+}
+
+canvas {
+	border: 1px solid black;
+}

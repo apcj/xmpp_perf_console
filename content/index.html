@@ -1,17 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>XMPP Performance Console</title>
-  <script type='text/javascript'
-	  src='http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'></script>
-  <script type='text/javascript' src='js/strophe.js'></script>                            
-  <script type="text/javascript" src="js/strophe.muc.js"></script>
-  <script type="text/javascript" src="js/smoothie.js"></script>
-  <script type='text/javascript'
-	  src='js/xmpp_perf_console.js'></script>
+	<title>XMPP Performance Console</title>
+	<link rel="stylesheet" href="css/console.css" />
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'></script>
+	<script type='text/javascript' src='js/strophe.js'></script>                            
+	<script type="text/javascript" src="js/strophe.muc.js"></script>
+	<script type="text/javascript" src="js/smoothie.js"></script>
+	<script type='text/javascript' src='js/xmpp_perf_console.js'></script>
 </head>                                                      
 
-<body onload="createTimeline()">
+<body>
   <div id='login' style='text-align: center'>
     <form name='cred'>
       <label for='jid'>JID:</label>
@@ -26,17 +25,40 @@
   <hr />
   <div id="outer">
 	<div id="left-column" style="float: left;">
-  		<div>
-  			<canvas id="throughputChart" width="500" height="200"></canvas>     
-  			<span id="throughputNumber"></span>
+  		<div class="mainDataDisplay">
+			<div class="labelContainer">
+				<span class="label">Throughput</span>
+			</div>
+			<div class="chartContainer">
+  				<canvas id="throughputChart" width="500" height="200"></canvas>     
+			</div>
+			<div class="numberContainer">
+  				<div class="bigNumber" id="throughputNumber">-</div>
+  				<div class="unit">req/s</div>
+			</div>
   		</div>
-  		<div>
-  			<canvas id="latencyChart" width="500" height="200"></canvas>     
-  			<span id="latencyNumber"></span>
+  		<div class="mainDataDisplay">
+			<div class="labelContainer">
+				<span class="label">Latency</span>
+			</div>
+			<div class="chartContainer">
+  				<canvas id="latencyChart" width="500" height="200"></canvas>     
+			</div>
+			<div class="numberContainer">
+  				<div class="bigNumber" id="latencyNumber">-</div>
+  				<div class="unit">ms</div>
+			</div>
   		</div
-  		<div>
-  			<canvas id="cpuLoadChart" width="500" height="200"></canvas>
-  			<span id="cpuLoadPercent"></span>
+  		<div class="mainDataDisplay">
+			<div class="labelContainer">
+				<span class="label">CPU</span>
+			</div>
+			<div class="chartContainer">
+  				<canvas id="cpuLoadChart" width="500" height="200"></canvas>
+			</div>
+			<div class="numberContainer">
+	  			<div class="bigNumber" id="cpuLoadPercent">-</div>
+			</div>
   		</div>
 		<hr />
 		<div id='log'></div>
