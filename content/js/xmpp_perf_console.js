@@ -26,33 +26,54 @@ function createTimeline() {
 
 function log(msg) 
 {
-    $('#log').append('<div></div>').append(document.createTextNode(msg));
+	console.log(msg);
+    // $('#log').append('<div></div>').append(document.createTextNode(msg));
 }
 
 function onConnect(status)
 {
     if (status == Strophe.Status.CONNECTING) {
-	log('Strophe is connecting.');
+		log('Strophe is connecting.');
     } else if (status == Strophe.Status.CONNFAIL) {
-	log('Strophe failed to connect.');
-	$('#connect').get(0).value = 'connect';
+		log('Strophe failed to connect.');
+		$('#connect').get(0).value = 'connect';
     } else if (status == Strophe.Status.DISCONNECTING) {
-	log('Strophe is disconnecting.');
+		log('Strophe is disconnecting.');
     } else if (status == Strophe.Status.DISCONNECTED) {
-	log('Strophe is disconnected.');
-	$('#connect').get(0).value = 'connect';
+		log('Strophe is disconnected.');
+		$('#connect').get(0).value = 'connect';
     } else if (status == Strophe.Status.CONNECTED) {
-	log('Strophe is connected.');
-	log('ECHOBOT: Send a message to ' + connection.jid + 
-	    ' to talk to me.');
+		log('Strophe is connected.');
+		log('XMPP Performance Console: Send a message to ' + connection.jid + 
+		    ' to talk to me.');
 
-	// connection.addHandler(onMessage, null, 'message', null, null,  null); 
-	connection.send($pres().tree());                
-	connection.muc.join($('#chatroomid').get(0).value, "console", onMessage, onMessage, "console");
+		// connection.addHandler(onMessage, null, 'message', null, null,  null); 
+		connection.send($pres().tree());                
+		connection.muc.join($('#chatroomid').get(0).value, "console", onMessage, onPresence, "console");
     }
 }
 
 var latestMeasurements = {};
+
+function onPresence(msg) {
+	var to = msg.getAttribute('to');
+    var from = msg.getAttribute('from');
+	var tagname = msg.tagName;
+	console.log(tagname + ' from ' + from + ' to ' + to);
+	
+	if (msg.type == 'unavailable') {
+		console.log(tagname + ' unavailable from ' + from + ' to ' + to);
+		removePresence(from);
+	}                      
+     
+	// we must return true to keep the handler alive.  
+    // returning false would remove it after it finishes.
+    return true;
+}                            
+
+var removePresence = function(presenceToRemove) {
+	//Would remove the agent from the chart at this point. Or fire some event to do it. What.Ev.er.                                          	
+}
 
 function onMessage(msg) {
     var to = msg.getAttribute('to');
