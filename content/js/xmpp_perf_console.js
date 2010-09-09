@@ -51,12 +51,16 @@ function onConnect(status)
 	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onMessage, "console");
     }
 }
-                                              
+
+var latestMeasurements = {};
+
 function onMessage(msg) {
     var to = msg.getAttribute('to');
     var from = msg.getAttribute('from');
     var type = msg.getAttribute('type');
     var elems = msg.getElementsByTagName('body');
+	var tagname = msg.tagName;
+	console.log(tagname);
 
     if ((type == "chat" || type == "groupchat") && elems.length > 0) {
 		var body = elems[0];
@@ -75,7 +79,9 @@ function onMessage(msg) {
 								
 				throughputAgentOne.append(currentTime, currentThroughput);
 				latencyAgentOne.append(currentTime, currentThroughput);
-			}			
+			}
+			// latestMeasurements[from] = { throughput: throughput, latency: latency };
+			// recaluateAggregates();
 		}
 	}
 	else {
@@ -88,6 +94,12 @@ function onMessage(msg) {
     return true;
 } 
 
+// var recaluateAggregates = function() {
+// 	var totalThroughput = 0
+// 	for (from in latestMeasurements) {
+// 		
+// 	}
+// }
 function updateChart(series, time, updateToMake, element, message) {
 	 series.append(time, updateToMake);			
 	 element.html(updateToMake + message);
