@@ -84,7 +84,6 @@ function onMessage(msg) {
 
     if ((type == "chat" || type == "groupchat") && elems.length > 0) {
 		var body = elems[0];
-        
 		var bodyText = Strophe.getText(body);
 		if (!isNaN(bodyText)) {          
 			var currentTime = new Date().getTime();
