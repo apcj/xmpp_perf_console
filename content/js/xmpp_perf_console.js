@@ -48,11 +48,31 @@ function onConnect(status)
 
 	// connection.addHandler(onMessage, null, 'message', null, null,  null); 
 	connection.send($pres().tree());                
-	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onMessage, "console");
+	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onPresence, "console");
     }
 }
 
 var latestMeasurements = {};
+
+function onPresence(msg) {
+	var to = msg.getAttribute('to');
+    var from = msg.getAttribute('from');
+	var tagname = msg.tagName;
+	console.log(tagname + ' from ' + from + ' to ' + to);
+	
+	if (msg.type == 'unavailable') {
+		console.log(tagname + ' unavailable from ' + from + ' to ' + to);
+		removePresence(from);
+	}                      
+     
+	// we must return true to keep the handler alive.  
+    // returning false would remove it after it finishes.
+    return true;
+}                            
+
+var removePresence = function(presenceToRemove) {
+	//Would remove the agent from the chart at this point. Or fire some event to do it. What.Ev.er.                                          	
+}
 
 function onMessage(msg) {
     var to = msg.getAttribute('to');
