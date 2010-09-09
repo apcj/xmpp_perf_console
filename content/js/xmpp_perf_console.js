@@ -31,18 +31,20 @@ function onConnect(status)
 	log('ECHOBOT: Send a message to ' + connection.jid + 
 	    ' to talk to me.');
 
-	connection.addHandler(onMessage, null, 'message', null, null,  null); 
-	connection.send($pres().tree());
+	// connection.addHandler(onMessage, null, 'message', null, null,  null); 
+	connection.send($pres().tree());                
+	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onMessage, "console");
+	
     }
 }
-
+                                              
 function onMessage(msg) {
     var to = msg.getAttribute('to');
     var from = msg.getAttribute('from');
     var type = msg.getAttribute('type');
     var elems = msg.getElementsByTagName('body');
 
-    if (type == "chat" && elems.length > 0) {
+    if ((type == "chat" || type == "groupchat") && elems.length > 0) {
 		var body = elems[0];
 
 		log('ECHOBOT: I got a message from ' + from + ': ' + 
@@ -58,6 +60,12 @@ function onMessage(msg) {
     // returning false would remove it after it finishes.
     return true;
 }
+    
+function onDisconnect(msg) {
+	connection.disconnect();
+	return true;
+}             
+
 
 $(document).ready(function () {
     connection = new Strophe.Connection(BOSH_SERVICE);
@@ -67,7 +75,7 @@ $(document).ready(function () {
     //connection.rawOutput = function (data) { log('SEND: ' + data); };
 
     // Uncomment the following line to see all the debug output.
-    //Strophe.log = function (level, msg) { log('LOG: ' + msg); };
+    // Strophe.log = function (level, msg) { log('LOG: ' + msg); };
 
 
     $('#connect').bind('click', function () {
@@ -79,8 +87,8 @@ $(document).ready(function () {
 			       $('#pass').get(0).value,
 			       onConnect);
 	} else {
-	    button.value = 'connect';
-	    connection.disconnect();
+	    button.value = 'connect';  
+		connection.muc.leave("performance@chatrooms.jalewis.thoughtworks.com", "console", onDisconnect);
 	}
     });
 });
