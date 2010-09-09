@@ -48,7 +48,7 @@ function onConnect(status)
 
 	// connection.addHandler(onMessage, null, 'message', null, null,  null); 
 	connection.send($pres().tree());                
-	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onMessage, "console");
+	connection.muc.join($('#chatroomid').get(0).value, "console", onMessage, onMessage, "console");
     }
 }
 
@@ -60,24 +60,26 @@ function onMessage(msg) {
     var type = msg.getAttribute('type');
     var elems = msg.getElementsByTagName('body');
 	var tagname = msg.tagName;
-	console.log(tagname);
 
     if ((type == "chat" || type == "groupchat") && elems.length > 0) {
 		var body = elems[0];
 		var bodyText = Strophe.getText(body);
-		if (!isNaN(bodyText)) {          
-			var currentTime = new Date().getTime();
-			var currentThroughput = parseFloat(bodyText);
+		
+		if (bodyText.indexOf('{') === 0) {
+			var measurement = JSON.parse(bodyText);
 
-			if (from.match('server')) {                                                                  
-				updateChart(cpuLoad, currentTime, currentThroughput, $("#cpuLoadPercent"), '%')
+			var currentTime = new Date().getTime();
+			
+			if (measurement.cpuUsage) {
+				updateChart(cpuLoad, currentTime, measurement.cpuUsage, $("#cpuLoadPercent"), '%')
 			}          
-			else {                                                  
-				updateChart(throughput, currentTime, currentThroughput, $("#throughputNumber"), ' / sec')
-				updateChart(latencies, currentTime, currentThroughput, $("#latencyNumber"), ' ms')				
-								
-				throughputAgentOne.append(currentTime, currentThroughput);
-				latencyAgentOne.append(currentTime, currentThroughput);
+			if (measurement.throughput) {                                                  
+				updateChart(throughput, currentTime, measurement.throughput, $("#throughputNumber"), ' / sec')
+				throughputAgentOne.append(currentTime, measurement.throughput);
+			}
+			if (measurement.latency) {                                                  
+				updateChart(latencies, currentTime, measurement.latency, $("#latencyNumber"), ' ms')				
+				latencyAgentOne.append(currentTime, measurement.latency);
 			}
 			// latestMeasurements[from] = { throughput: throughput, latency: latency };
 			// recaluateAggregates();

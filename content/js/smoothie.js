@@ -153,7 +153,9 @@ SmoothieChart.prototype.render = function(canvas, time) {
 
   // Calculate the current scale of the chart, from all time series.
   var maxValue = Number.NaN;
-  var minValue = Number.NaN;
+  // APCJ: Don't bother finding the minimum, just fix to zero
+  // var minValue = Number.NaN;
+  var minValue = 0;
 
   for (var d = 0; d < this.seriesSet.length; d++) {
       // TODO(ndunn): We could calculate / track these values as they stream in.
@@ -162,9 +164,10 @@ SmoothieChart.prototype.render = function(canvas, time) {
           maxValue = !isNaN(maxValue) ? Math.max(maxValue, timeSeries.maxValue) : timeSeries.maxValue;
       }
 
-      if (!isNaN(timeSeries.minValue)) {
-          minValue = !isNaN(minValue) ? Math.min(minValue, timeSeries.minValue) : timeSeries.minValue;
-      }
+      // APCJ: Don't bother finding the minimum, just fix to zero
+      // if (!isNaN(timeSeries.minValue)) {
+      //     minValue = !isNaN(minValue) ? Math.min(minValue, timeSeries.minValue) : timeSeries.minValue;
+      // }
   }
 
   if (isNaN(maxValue) && isNaN(minValue)) {
