@@ -45,9 +45,6 @@ function onMessage(msg) {
     if (type == "chat" && elems.length > 0) {
 		var body = elems[0];
 
-		log('ECHOBOT: I got a message from ' + from + ': ' + 
-		    Strophe.getText(body));
-    
 		var bodyText = Strophe.getText(body);
 		if (!isNaN(bodyText)) {
 			latencies.append(new Date().getTime(), parseFloat(bodyText));
