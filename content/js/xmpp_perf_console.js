@@ -1,12 +1,27 @@
 var BOSH_SERVICE = 'http://localhost/http-bind/';
 var connection = null;
 
-var latencies = new TimeSeries();
+var latencies = new TimeSeries();   
+var throughput = new TimeSeries();   
+var cpuLoad = new TimeSeries();
+
+var throughputAgentOne = new TimeSeries();   
+var latencyAgentOne = new TimeSeries();
+
+                           
+function createChart(timeseries, chartReference) {
+  	var chart = new SmoothieChart();
+	chart.addTimeSeries(timeseries, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+	chart.streamTo(chartReference, 500);  
+	return chart;
+}
 
 function createTimeline() {
-  var chart = new SmoothieChart();
-  chart.addTimeSeries(latencies, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
-  chart.streamTo(document.getElementById("chart"), 500);
+	var throughputChart = createChart(throughput, document.getElementById("throughputChart"));
+	var latencyChart = createChart(latencies, document.getElementById("latencyChart"));
+	var cpuLoadChart = createChart(cpuLoad, document.getElementById("cpuLoadChart"));	
+	var throughputAgentOneChart = createChart(throughputAgentOne, document.getElementById("throughputAgentOneChart"));	
+	var latencyAgentOneChart = createChart(latencyAgentOne, document.getElementById("latencyAgentOneChart"));
 }
 
 function log(msg) 
@@ -34,7 +49,6 @@ function onConnect(status)
 	// connection.addHandler(onMessage, null, 'message', null, null,  null); 
 	connection.send($pres().tree());                
 	connection.muc.join("performance@chatrooms.jalewis.thoughtworks.com", "console", onMessage, onMessage, "console");
-	
     }
 }
                                               
@@ -46,19 +60,37 @@ function onMessage(msg) {
 
     if ((type == "chat" || type == "groupchat") && elems.length > 0) {
 		var body = elems[0];
-
-		log('ECHOBOT: I got a message from ' + from + ': ' + 
-		    Strophe.getText(body));
-    
+        
 		var bodyText = Strophe.getText(body);
-		if (!isNaN(bodyText)) {
-			latencies.append(new Date().getTime(), parseFloat(bodyText));
+		if (!isNaN(bodyText)) {          
+			var currentTime = new Date().getTime();
+			var currentThroughput = parseFloat(bodyText);
+
+			if (from.match('server')) {                                                                  
+				updateChart(cpuLoad, currentTime, currentThroughput, $("#cpuLoadPercent"), '%')
+			}          
+			else {                                                  
+				updateChart(throughput, currentTime, currentThroughput, $("#throughputNumber"), ' / sec')
+				updateChart(latencies, currentTime, currentThroughput, $("#latencyNumber"), ' ms')				
+								
+				throughputAgentOne.append(currentTime, currentThroughput);
+				latencyAgentOne.append(currentTime, currentThroughput);
+			}			
 		}
+	}
+	else {
+		log('ECHOBOT: I got a message that I did not understand from ' + from + ': ' + 
+		    Strophe.getText(body));
 	}	
     
 	// we must return true to keep the handler alive.  
     // returning false would remove it after it finishes.
     return true;
+} 
+
+function updateChart(series, time, updateToMake, element, message) {
+	 series.append(time, updateToMake);			
+	 element.html(updateToMake + message);
 }
     
 function onDisconnect(msg) {
