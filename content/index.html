@@ -14,9 +14,9 @@
   <div id='login' style='text-align: center'>
     <form name='cred'>
       <label for='jid'>JID:</label>
-      <input type='text' id='jid' value='console@jalewis.thoughtworks.com'/>
+      <input type='text' id='jid' value='console@alistair-jones-macbook-pro.local'/>
       <label for='chatroomid'>Chatroom:</label>
-      <input type='text' id='chatroomid' value='performance@chatrooms.jalewis.thoughtworks.com'/>
+      <input type='text' id='chatroomid' value='performance@chatrooms.alistair-jones-macbook-pro.local'/>
       <label for='pass'>Password:</label>
       <input type='password' id='pass' value='console' />
       <input type='button' id='connect' value='connect' />
@@ -32,7 +32,7 @@
 			<div class="chartContainer">
   				<canvas id="throughputChart" width="400" height="200"></canvas>     
 			</div>
-			<div class="numberContainer">
+			<div class="bigNumberContainer">
   				<div class="bigNumber" id="throughputNumber">-</div>
   				<div class="unit">req/s</div>
 			</div>
@@ -44,7 +44,7 @@
 			<div class="chartContainer">
   				<canvas id="latencyChart" width="400" height="200"></canvas>     
 			</div>
-			<div class="numberContainer">
+			<div class="bigNumberContainer">
   				<div class="bigNumber" id="latencyNumber">-</div>
   				<div class="unit">ms</div>
 			</div>
@@ -56,7 +56,7 @@
 			<div class="chartContainer">
   				<canvas id="cpuLoadChart" width="400" height="200"></canvas>
 			</div>
-			<div class="numberContainer">
+			<div class="bigNumberContainer">
 	  			<div class="bigNumber" id="cpuLoadPercent">-</div>
 			</div>
   		</div>
@@ -72,7 +72,7 @@
 				<div class="chartContainer">
 					<canvas class="throughputChart" width="250" height="100"></canvas>
 				</div>
-				<div class="numberContainer">
+				<div class="agentNumberContainer">
 					<div class="throughputNumber agentNumber">-</div>
 				</div>
 			</div>
@@ -80,7 +80,7 @@
 				<div class="chartContainer">
 					<canvas class="latencyChart" width="250" height="100"></canvas>
 				</div>
-				<div class="numberContainer">
+				<div class="agentNumberContainer">
 					<div class="latencyNumber agentNumber">-</div>
 				</div>
 			</div>

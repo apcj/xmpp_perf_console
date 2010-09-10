@@ -6,13 +6,8 @@ body {
 	display: none;
 }
 
-.mainDataDisplay {
-	width: 600px;
-}
-
 .agentDataDisplay {
-	width: 350px;
-	overflow:hidden;
+	overflow: hidden;
 }
 
 .mainDataDisplay, .agent {
@@ -34,10 +29,12 @@ body {
 	overflow: hidden;
 }
 
-.numberContainer {
+.bigNumberContainer {
+	width: 200px;
 	padding: 10px;
+	overflow: hidden;
 }
-.numberContainer div {
+.bigNumberContainer div {
 	float: none;
 }
 
@@ -65,8 +62,13 @@ body {
 	font-weight: bold;
 }
 
+.agentNumberContainer {
+	width: 100px;
+	overflow: hidden;
+}
+
 .agentNumber {
-	font-size: 70px;
+	font-size: 50px;
 	font-weight: bold;
 }
 
