@@ -9,19 +9,19 @@ var throughputAgentOne = new TimeSeries();
 var latencyAgentOne = new TimeSeries();
 
                            
-function createChart(timeseries, chartReference) {
+function createChart(timeseries, chartReference, colour) {
   	var chart = new SmoothieChart();
-	chart.addTimeSeries(timeseries, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+	chart.addTimeSeries(timeseries, { strokeStyle: 'rgba(' + colour + ', 1)', fillStyle: 'rgba(' + colour + ', 0.2)', lineWidth: 4 });
 	chart.streamTo(chartReference, 500);  
 	return chart;
 }
 
 function createTimeline() {
-	var throughputChart = createChart(throughput, document.getElementById("throughputChart"));
-	var latencyChart = createChart(latencies, document.getElementById("latencyChart"));
-	var cpuLoadChart = createChart(cpuLoad, document.getElementById("cpuLoadChart"));	
-	var throughputAgentOneChart = createChart(throughputAgentOne, document.getElementById("throughputAgentOneChart"));	
-	var latencyAgentOneChart = createChart(latencyAgentOne, document.getElementById("latencyAgentOneChart"));
+	var throughputChart = createChart(throughput, document.getElementById("throughputChart"), '0, 255, 0');
+	var latencyChart = createChart(latencies, document.getElementById("latencyChart"), '0, 0, 255');
+	var cpuLoadChart = createChart(cpuLoad, document.getElementById("cpuLoadChart"), '255, 0, 0');	
+	var throughputAgentOneChart = createChart(throughputAgentOne, document.getElementById("throughputAgentOneChart"), '0, 255, 0');	
+	var latencyAgentOneChart = createChart(latencyAgentOne, document.getElementById("latencyAgentOneChart"), '0, 0, 255');
 }
 
 function log(msg) 
@@ -53,7 +53,6 @@ function onConnect(status)
     }
 }
 
-var latestMeasurements = {};
 
 function onPresence(msg) {
 	var to = msg.getAttribute('to');
@@ -75,6 +74,8 @@ var removePresence = function(presenceToRemove) {
 	//Would remove the agent from the chart at this point. Or fire some event to do it. What.Ev.er.                                          	
 }
 
+var latestMeasurements = {};
+
 function onMessage(msg) {
     var to = msg.getAttribute('to');
     var from = msg.getAttribute('from');
@@ -95,11 +96,11 @@ function onMessage(msg) {
 				updateChart(cpuLoad, currentTime, measurement.cpuUsage, $("#cpuLoadPercent"), '%')
 			}          
 			if (measurement.throughput) {                                                  
-				updateChart(throughput, currentTime, measurement.throughput, $("#throughputNumber"), ' / sec')
+				updateChart(throughput, currentTime, measurement.throughput, $("#throughputNumber"), '')
 				throughputAgentOne.append(currentTime, measurement.throughput);
 			}
 			if (measurement.latency) {                                                  
-				updateChart(latencies, currentTime, measurement.latency, $("#latencyNumber"), ' ms')				
+				updateChart(latencies, currentTime, measurement.latency, $("#latencyNumber"), '')				
 				latencyAgentOne.append(currentTime, measurement.latency);
 			}
 			// latestMeasurements[from] = { throughput: throughput, latency: latency };
