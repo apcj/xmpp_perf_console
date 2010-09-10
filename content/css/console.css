@@ -2,7 +2,20 @@ body {
 	font-family: Helvetica;
 }
 
+.prototype {
+	display: none;
+}
+
 .mainDataDisplay {
+	width: 600px;
+}
+
+.agentDataDisplay {
+	width: 350px;
+	overflow:hidden;
+}
+
+.mainDataDisplay, .agent {
 	overflow: hidden;
 	postion: absolute;
 	vertical-align: middle;
@@ -12,8 +25,13 @@ body {
 	border-radius: 7px;
 }
 
-.mainDataDisplay div {
+.mainDataDisplay div, .agentDataDisplay div {
 	float: left;
+}
+
+.JidContainer {
+	width: 350px;
+	overflow: hidden;
 }
 
 .numberContainer {
@@ -33,6 +51,10 @@ body {
 	-moz-transform: rotate(-90deg);
 }
 
+.agentJid {
+	font-size: 20px;
+}
+
 .label, .unit {
 	font-size: 30px;
 	font-weight: bold;
@@ -40,6 +62,11 @@ body {
 
 .bigNumber {
 	font-size: 100px;
+	font-weight: bold;
+}
+
+.agentNumber {
+	font-size: 70px;
 	font-weight: bold;
 }
 

@@ -14,9 +14,9 @@
   <div id='login' style='text-align: center'>
     <form name='cred'>
       <label for='jid'>JID:</label>
-      <input type='text' id='jid' value='console@alistair-jones-macbook-pro.local'/>
+      <input type='text' id='jid' value='console@jalewis.thoughtworks.com'/>
       <label for='chatroomid'>Chatroom:</label>
-      <input type='text' id='chatroomid' value='performance@chatrooms.alistair-jones-macbook-pro.local'/>
+      <input type='text' id='chatroomid' value='performance@chatrooms.jalewis.thoughtworks.com'/>
       <label for='pass'>Password:</label>
       <input type='password' id='pass' value='console' />
       <input type='button' id='connect' value='connect' />
@@ -30,7 +30,7 @@
 				<span class="label">Throughput</span>
 			</div>
 			<div class="chartContainer">
-  				<canvas id="throughputChart" width="500" height="200"></canvas>     
+  				<canvas id="throughputChart" width="400" height="200"></canvas>     
 			</div>
 			<div class="numberContainer">
   				<div class="bigNumber" id="throughputNumber">-</div>
@@ -42,7 +42,7 @@
 				<span class="label">Latency</span>
 			</div>
 			<div class="chartContainer">
-  				<canvas id="latencyChart" width="500" height="200"></canvas>     
+  				<canvas id="latencyChart" width="400" height="200"></canvas>     
 			</div>
 			<div class="numberContainer">
   				<div class="bigNumber" id="latencyNumber">-</div>
@@ -54,7 +54,7 @@
 				<span class="label">CPU</span>
 			</div>
 			<div class="chartContainer">
-  				<canvas id="cpuLoadChart" width="500" height="200"></canvas>
+  				<canvas id="cpuLoadChart" width="400" height="200"></canvas>
 			</div>
 			<div class="numberContainer">
 	  			<div class="bigNumber" id="cpuLoadPercent">-</div>
@@ -63,14 +63,27 @@
 		<hr />
 		<div id='log'></div>
 	</div>
-	<div id="right-column" style="float: right;">    
-		<div>
-			<div>
-  				<canvas id="throughputAgentOneChart" width="250" height="100"></canvas>     
-  			</div>
-			<div>
-  				<canvas id="latencyAgentOneChart" width="250" height="100"></canvas>     
-  			</div>
+	<div id="right-column" style="float: right;">
+		<div class="agent prototype">
+			<div class="JidContainer">
+				<div class="agentJid">jmeter</div>
+			</div>
+			<div class="agentDataDisplay">
+				<div class="chartContainer">
+					<canvas class="throughputChart" width="250" height="100"></canvas>
+				</div>
+				<div class="numberContainer">
+					<div class="throughputNumber agentNumber">-</div>
+				</div>
+			</div>
+			<div class="agentDataDisplay">
+				<div class="chartContainer">
+					<canvas class="latencyChart" width="250" height="100"></canvas>
+				</div>
+				<div class="numberContainer">
+					<div class="latencyNumber agentNumber">-</div>
+				</div>
+			</div>
 		</div>
 	</div>
   </div>

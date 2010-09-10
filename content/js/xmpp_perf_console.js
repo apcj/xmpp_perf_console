@@ -4,10 +4,6 @@ var connection = null;
 var latencies = new TimeSeries();   
 var throughput = new TimeSeries();   
 var cpuLoad = new TimeSeries();
-
-var throughputAgentOne = new TimeSeries();   
-var latencyAgentOne = new TimeSeries();
-
                            
 function createChart(timeseries, chartReference) {
   	var chart = new SmoothieChart();
@@ -20,9 +16,18 @@ function createTimeline() {
 	var throughputChart = createChart(throughput, document.getElementById("throughputChart"));
 	var latencyChart = createChart(latencies, document.getElementById("latencyChart"));
 	var cpuLoadChart = createChart(cpuLoad, document.getElementById("cpuLoadChart"));	
-	var throughputAgentOneChart = createChart(throughputAgentOne, document.getElementById("throughputAgentOneChart"));	
-	var latencyAgentOneChart = createChart(latencyAgentOne, document.getElementById("latencyAgentOneChart"));
-}
+} 
+
+var addAgentCharts = function(agentJid, throughputTimeseries, latencyTimeseries) {                                                    
+	var agentDiv = $('.prototype').clone();
+	$('#right-column').append(agentDiv);
+	agentDiv.removeClass('prototype');
+	agentDiv.attr('id', agentJid);
+	agentDiv.find('.agentJid').html(agentJid);
+		
+	createChart(throughputTimeseries, agentDiv.find('.throughputChart').get(0));	
+	createChart(latencyTimeseries, agentDiv.find('.latencyChart').get(0));
+}  
 
 function log(msg) 
 {
@@ -59,21 +64,12 @@ function onPresence(msg) {
 	var to = msg.getAttribute('to');
     var from = msg.getAttribute('from');
 	var tagname = msg.tagName;
-	console.log(tagname + ' from ' + from + ' to ' + to);
 	
 	if (msg.type == 'unavailable') {
 		console.log(tagname + ' unavailable from ' + from + ' to ' + to);
-		removePresence(from);
-	}                      
-     
-	// we must return true to keep the handler alive.  
-    // returning false would remove it after it finishes.
+	}                                                                               
     return true;
 }                            
-
-var removePresence = function(presenceToRemove) {
-	//Would remove the agent from the chart at this point. Or fire some event to do it. What.Ev.er.                                          	
-}
 
 function onMessage(msg) {
     var to = msg.getAttribute('to');
@@ -88,22 +84,21 @@ function onMessage(msg) {
 		
 		if (bodyText.indexOf('{') === 0) {
 			var measurement = JSON.parse(bodyText);
-
 			var currentTime = new Date().getTime();
 			
 			if (measurement.cpuUsage) {
 				updateChart(cpuLoad, currentTime, measurement.cpuUsage, $("#cpuLoadPercent"), '%')
 			}          
-			if (measurement.throughput) {                                                  
-				updateChart(throughput, currentTime, measurement.throughput, $("#throughputNumber"), ' / sec')
-				throughputAgentOne.append(currentTime, measurement.throughput);
+			if (measurement.throughput) {
+				updateAgents(from, measurement);                                                  
+				updateChart(throughput, currentTime, aggregate('throughput'), $("#throughputNumber"), ' / sec');
+				agents[from].timeseries.throughput.append(currentTime, measurement.throughput);
 			}
 			if (measurement.latency) {                                                  
-				updateChart(latencies, currentTime, measurement.latency, $("#latencyNumber"), ' ms')				
-				latencyAgentOne.append(currentTime, measurement.latency);
-			}
-			// latestMeasurements[from] = { throughput: throughput, latency: latency };
-			// recaluateAggregates();
+				updateAgents(from, measurement);         
+				updateChart(latencies, currentTime, aggregate('latency'), $("#latencyNumber"), ' ms');
+				agents[from].timeseries.latency.append(currentTime, measurement.latency);
+			}			
 		}
 	}
 	else {
@@ -114,14 +109,32 @@ function onMessage(msg) {
 	// we must return true to keep the handler alive.  
     // returning false would remove it after it finishes.
     return true;
-} 
+}    
 
-// var recaluateAggregates = function() {
-// 	var totalThroughput = 0
-// 	for (from in latestMeasurements) {
-// 		
-// 	}
-// }
+var agents = { };
+  
+var updateAgents = function(agentJid, measurement) {
+	
+	if (agents[agentJid]) { 
+		agents[agentJid].latestMeasurement = measurement;
+	}                            
+	else {
+		//add agent into hash along with a new timeseries thingy               		
+		//add a new agent div into the panel and start streaming
+		agents[agentJid] = { timeseries: { throughput: new TimeSeries(), latency: new TimeSeries() }, chartId: agentJid, latestMeasurement: measurement };
+		addAgentCharts(agentJid, agents[agentJid].timeseries.throughput, agents[agentJid].timeseries.latency);
+	}
+	
+}
+
+var aggregate = function(field) {
+	var accumulator = 0;
+	for (agentJid in agents) {
+		accumulator += agents[agentJid].latestMeasurement[field];
+	}
+	return accumulator;
+}
+
 function updateChart(series, time, value, element, suffix) {
 	 series.append(time, value);			
 	 element.html(value.toFixed(0) + suffix);
@@ -131,7 +144,6 @@ function onDisconnect(msg) {
 	connection.disconnect();
 	return true;
 }             
-
 
 $(document).ready(function () {
     connection = new Strophe.Connection(BOSH_SERVICE);
